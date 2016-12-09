@@ -59,7 +59,7 @@ class bisection(equation_resolving):
     '''Класс, описывающий логику решения уравнений методом половинного деления.'''
 
     def __init__(self, range, base_function=None, derivative=None, sqr_derivative=None, error=0.00001, debug=False):
-        super().__init__(range, base_function, derivative, sqr_derivative, error=0.00001, debug=debug)
+        super().__init__(range, base_function, derivative, sqr_derivative, error=error, debug=debug)
         self.method_name = 'Метод половинного деления'
 
     def resolve(self):
@@ -87,7 +87,7 @@ class chord(equation_resolving):
     '''Класс, описывающий логику решения уравнений методом хорд.'''
 
     def __init__(self, range, base_function=None, derivative=None, sqr_derivative=None, error=0.00001, debug=False):
-        super().__init__(range, base_function, derivative, sqr_derivative, error=0.00001, debug=debug)
+        super().__init__(range, base_function, derivative, sqr_derivative, error=error, debug=debug)
         self.method_name = 'Метод хорд'
 
     def resolve(self):
@@ -116,7 +116,7 @@ class shearing(equation_resolving):
     '''Класс, описывающий логику решения уравнений методом касательных.'''
 
     def __init__(self, range, base_function=None, derivative=None, sqr_derivative=None, error=0.00001, debug=False):
-        super().__init__(range, base_function, derivative, sqr_derivative, error=0.00001, debug=debug)
+        super().__init__(range, base_function, derivative, sqr_derivative, error=error, debug=debug)
         self.method_name = 'Метод касательных'
 
     def resolve(self):
@@ -145,7 +145,7 @@ class combo(equation_resolving):
     '''Класс, описывающий логику решения уравнений комбинированным методом.'''
 
     def __init__(self, range, base_function=None, derivative=None, sqr_derivative=None, error=0.00001, debug=False):
-        super().__init__(range, base_function, derivative, sqr_derivative, error=0.00001, debug=debug)
+        super().__init__(range, base_function, derivative, sqr_derivative, error=error, debug=debug)
         self.method_name = 'Комбинированный метод хорд и касательных'
 
     def resolve(self):

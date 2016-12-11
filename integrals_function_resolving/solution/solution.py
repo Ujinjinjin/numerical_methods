@@ -1,5 +1,5 @@
 from solution.analysis import *
-from equations.resolving_methods import *
+from integrals.resolving_methods import *
 
 class solution:
 
@@ -28,13 +28,11 @@ class solution:
 
         print('{}\n'.format('-'*50))  # Исключительно красоты ради
 
-        base_function = input("f(x)=") #'x**3 - 3*x + 7' #
-        derivative = input("f'(x)=") #'3*x**2 - 3' #
-        sqr_derivative = input("f''(x)=") #'6*x' #
+        base_function = input("f(x)=") #'x**2' #
 
         print('\n{}'.format('-'*50))  # Исключительно красоты ради
 
-        a, b = input('Введите границы для поиска корня в виде "a, b": ').split(', ')
+        a, b = input('Введите пределы интегрирования(нижний-верхний) в виде "a, b": ').split(', ')
         print('{}'.format('-'*50))  # Исключительно красоты ради
         range = [float(a), float(b)]
 
@@ -46,15 +44,16 @@ class solution:
         print('{}'.format('-'*50))  # Исключительно красоты ради
 
         # Предложить использовать точность не по умолчанию
-        if self.__check_choise(self.__make_choise('Желаете отказаться от использования точности по умолчанию (0.00001)?')):
+        if self.__check_choise(self.__make_choise('Желаете отказаться от использования точности по умолчанию (0.001)?')):
             error = float(input('Введите новое значение точности: '))
         else:
-            error = 0.00001
+            error = 0.001
         
-        methods = [bisection(range, base_function, derivative, sqr_derivative, error, self.debug),  # Метод половинного деления
-                   chord(range, base_function, derivative, sqr_derivative, error, self.debug),  # Метод хорд
-                   shearing(range, base_function, derivative, sqr_derivative, error, self.debug),  # Метод касательных
-                   combo(range, base_function, derivative, sqr_derivative, error, self.debug),  # Комбинированный метод
+        methods = [left_rect(range, base_function, error, self.debug),  # Метод левых прямоугольников
+                   right_rect(range, base_function, error, self.debug),  # Метод правых прямоугольников
+                   middle_rect(range, base_function, error, self.debug),  # Метод средних прямоугольников
+                   trapeze(range, base_function, error, self.debug),  # Метод трапеций
+                   parabole(range, base_function, error, self.debug),  # Метод трапеций
                    ]
 
         # Просто решить уравнения

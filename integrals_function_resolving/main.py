@@ -18,6 +18,8 @@ if __name__ == '__main__':
     sol = solution(analyze=analyze)
     sol.run()
 
+    input()
+
     # range = [-3, -2]
     # f = 'x**3 - 3*x + 7'
     # f1 = '3*x**2 - 3'

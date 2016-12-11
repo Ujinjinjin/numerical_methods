@@ -26,8 +26,9 @@ class analyzer:
     def annalyze(self):
         '''Получить результаты эфективности решения задачи каждым методом.'''
 
-        for method in self.methods:
+        print('Прогресс анализа: ')
 
+        for method in self.methods:
             self.method_names.append(method.method_name)
 
             current_error = self.min_error
@@ -40,6 +41,9 @@ class analyzer:
                 current_error += self.error_step
             
             self.method_steps.append(steps)
+            print('#', end='')
+
+        print('\nАнализ успешно завершен')
 
     def graph(self):
         '''Построить график эфективности каждого метода.'''

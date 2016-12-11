@@ -1,5 +1,6 @@
-# from equations.resolving import resolving
-from resolving import resolving
+# from resolving import resolving
+from integrals.resolving import resolving
+
 import copy
 
 
@@ -42,7 +43,7 @@ class left_rect(integrals_resolving):
         a, b = self.range
         n = 0
         s = 0
-        s1 = self.error + 1
+        s1 = self.error * 10
         split_count = 10  # Кол-во разбиений
         while abs(s - s1) >= self.error:
             n += 1
@@ -50,9 +51,9 @@ class left_rect(integrals_resolving):
             s1 = copy.deepcopy(s)
             s = 0
             h = (b - a) / split_count
-            x = copy.deepcopy(a)
+            x_boof = a
             for i in range(0, split_count):
-                x += h
+                x = x_boof + i*h
                 s += self.f(x)
 
             s *= h
@@ -78,7 +79,7 @@ class right_rect(integrals_resolving):
         a, b = self.range
         n = 0
         s = 0
-        s1 = self.error + 1
+        s1 = self.error * 10
         split_count = 10  # Кол-во разбиений
         while abs(s - s1) >= self.error:
             n += 1
@@ -86,77 +87,131 @@ class right_rect(integrals_resolving):
             s1 = copy.deepcopy(s)
             s = 0
             h = (b - a) / split_count
-            x = copy.deepcopy(a)
+            x_boof = a
             for i in range(1, split_count+1):
-                x += h
+                x = x_boof + i*h
                 s += self.f(x)
 
             s *= h
             split_count *= 2
             if self.debug:
                 print('{0}: {1}'.format(n, s))
+
         return resolving.from_dict({'steps': n,
                                     'value': s,
                                     'method_name': self.method_name})
 
 
 class middle_rect(integrals_resolving):
-    '''Класс, описывающий логику решения уравнений методом касательных.'''
+    '''Класс, описывающий логику вычисления интеграла функции методом средних прямоугольников.'''
 
     def __init__(self, range, base_function=None, error=0.001, debug=False):
         super().__init__(range, base_function, error=error, debug=debug)
-        self.method_name = 'Метод касательных'
+        self.method_name = 'Метод средних прямоугольников'
 
     def resolve(self):
-        '''Поиск корней методом касательных.'''
+        '''Вычисление интеграла методом средних прямоугольников.'''
         super().resolve()
         a, b = self.range
         n = 0
-
-        if self.f(a)*self.f2(a)>0:
-            c = a
-        else:
-            c = b
-        while abs(self.f(c)) > self.error:
+        s = 0
+        s1 = self.error * 10
+        split_count = 10  # Кол-во разбиений
+        while abs(s - s1) >= self.error:
             n += 1
-            c = c - (self.f(c) / self.f1(c))
+
+            s1 = copy.deepcopy(s)
+            s = 0
+            h = (b - a) / split_count
+            x_boof = copy.deepcopy(a) + h/2
+            for i in range(0, split_count):
+                x = x_boof + i*h
+                s += self.f(x)
+
+            s *= h
+            split_count *= 2
             if self.debug:
-                print('{0}: {1}'.format(n, c))
-                # print('{0}: {1}\nf(x)={2}'.format(n, c, self.f(c)))
+                print('{0}: {1}'.format(n, s))
 
         return resolving.from_dict({'steps': n,
-                                   'value': c,
-                                   'method_name': self.method_name})
-
-
-class trapeze(integrals_resolving):
-    '''Класс, описывающий логику решения уравнений комбинированным методом.'''
-
-    def __init__(self, range, base_function=None, error=0.001, debug=False):
-        super().__init__(range, base_function, error=error, debug=debug)
-        self.method_name = 'Комбинированный метод хорд и касательных'
-
-    def resolve(self):
-        '''Поиск корней комбинированным методом хорд и касательных.'''
-        super().resolve()
-
-        x = (chord_resolve.value + chord_resolve.value) / 2
-        n = chord_resolve.steps + shearing_resolve.steps
-
-        return resolving.from_dict({'steps': n,
-                                    'value': x,
+                                    'value': s,
                                     'method_name': self.method_name})
 
 
-class parabola(integrals_resolving):
-    ''''''
-    pass
+class trapeze(integrals_resolving):
+    '''Класс, описывающий логику вычисления интеграла функции методом трапеций.'''
+
+    def __init__(self, range, base_function=None, error=0.001, debug=False):
+        super().__init__(range, base_function, error=error, debug=debug)
+        self.method_name = 'Метод трапеций'
+
+    def resolve(self):
+        '''Вычисление интеграла методом трапеций.'''
+        super().resolve()
+        a, b = self.range
+        n = 0
+        s = 0
+        s1 = self.error * 10
+        split_count = 10  # Кол-во разбиений
+        while abs(s - s1) >= self.error:
+            n += 1
+
+            s1 = copy.deepcopy(s)
+            s = 0
+            h = (b - a) / split_count
+            x_boof = copy.deepcopy(a)
+            s = (self.f(a) + self.f(b)) / 2
+
+            for i in range(1, split_count):
+                x = x_boof + i*h
+                s += self.f(x)
+
+            s *= h
+            split_count *= 2
+            if self.debug:
+                print('{0}: {1}'.format(n, s))
+
+        return resolving.from_dict({'steps': n,
+                                    'value': s,
+                                    'method_name': self.method_name})
 
 
+class parabole(integrals_resolving):
+    '''Класс, описывающий логику вычисления интеграла функции методом парабол.'''
 
-if __name__=="__main__":
+    def __init__(self, range, base_function=None, error=0.001, debug=False):
+        super().__init__(range, base_function, error=error, debug=debug)
+        self.method_name = 'Метод парабол'
 
-    left = left_rect([2, 5], 'x**2', 0.1)
-    right = right_rect([2, 5], 'x**2', 0.1)
-    print(left.resolve())
-    print(right.resolve())
+    def resolve(self):
+        '''Вычисление интеграла методом парабол.'''
+        super().resolve()
+        a, b = self.range
+        n = 0
+        s = 0
+        s1 = self.error * 10
+        split_count = 10  # Кол-во разбиений
+        while abs(s - s1) >= self.error:
+            n += 1
+
+            s1 = copy.deepcopy(s)
+            s = 0
+            h = (b - a) / split_count
+            x_boof = copy.deepcopy(a)
+            s = self.f(a) + self.f(b)
+
+            for i in range(1, split_count):
+                x = x_boof + i*h
+                if (i % 2 == 0):
+                    s += 2*self.f(x)
+                else:
+                    s += 4*self.f(x)
+
+            s *= h/3
+            split_count *= 2
+            if self.debug:
+                print('{0}: {1}'.format(n, s))
+
+        return resolving.from_dict({'steps': n,
+                                    'value': s,
+                                    'method_name': self.method_name})

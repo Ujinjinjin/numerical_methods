@@ -2,6 +2,7 @@
 from integrals.resolving import resolving
 
 import copy
+import math
 
 
 class integrals_resolving:

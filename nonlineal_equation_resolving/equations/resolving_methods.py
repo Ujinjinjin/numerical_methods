@@ -1,5 +1,7 @@
 from equations.resolving import resolving
 
+import math
+
 
 class equation_resolving:
     '''Материнский класс для решения уравнений.'''
